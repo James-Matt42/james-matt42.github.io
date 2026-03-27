@@ -16,14 +16,10 @@
       --blue:#2563eb;
       --blue-2:#1d4ed8;
       --gold:#f59e0b;
-      --soft-blue:#eef4ff;
-      --soft-gold:#fff7e8;
       --shadow:0 18px 42px rgba(0,0,0,.16);
-      --radius:22px;
     }
 
     *{box-sizing:border-box}
-
     body{
       margin:0;
       font-family:Arial, Helvetica, sans-serif;
@@ -36,14 +32,14 @@
     }
 
     .wrap{
-      max-width:1160px;
+      max-width:1120px;
       margin:0 auto;
-      padding:28px 18px 44px;
+      padding:28px 18px 40px;
     }
 
     .hero{
       display:grid;
-      grid-template-columns:1.1fr .9fr;
+      grid-template-columns:1.05fr .95fr;
       gap:18px;
       align-items:stretch;
     }
@@ -55,6 +51,15 @@
       padding:24px;
       backdrop-filter: blur(6px);
       box-shadow:0 16px 36px rgba(0,0,0,.16);
+    }
+
+    .card{
+      background:#fff;
+      border-radius:24px;
+      padding:22px;
+      color:var(--text);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(0,0,0,.05);
     }
 
     .eyebrow{
@@ -71,7 +76,7 @@
       color:#dbe8ff;
     }
 
-    h1,h2,h3,p{margin:0}
+    h1,h2,p{margin:0}
     h1{
       font-size:46px;
       line-height:1;
@@ -83,7 +88,7 @@
       font-size:17px;
       line-height:1.65;
       color:#d7e5ff;
-      max-width:720px;
+      max-width:700px;
     }
 
     .chips{
@@ -100,16 +105,6 @@
       border:1px solid rgba(255,255,255,.15);
       font-size:13px;
       color:#f5f9ff;
-    }
-
-    .card{
-      background:#fff;
-      border-radius:24px;
-      padding:22px;
-      color:var(--text);
-      box-shadow:var(--shadow);
-      border:1px solid rgba(0,0,0,.05);
-      min-width:0;
     }
 
     h2{
@@ -179,7 +174,7 @@
       background:#fff;
       color:var(--text);
       border-radius:18px;
-      padding:16px 16px;
+      padding:16px;
       text-align:left;
       cursor:pointer;
       transition:.16s ease;
@@ -241,9 +236,7 @@
       transition:.15s ease;
     }
 
-    .start-btn:hover{
-      transform:translateY(-1px);
-    }
+    .start-btn:hover{ transform:translateY(-1px); }
 
     .status{
       color:#92400e;
@@ -252,63 +245,43 @@
       min-height:20px;
     }
 
-    .feature-list{
-      display:grid;
-      gap:12px;
+    .how{
       margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
     }
 
-    .feature{
-      padding:16px;
+    .step{
+      border:1px solid #dde7f3;
       border-radius:18px;
-      background:linear-gradient(180deg, var(--soft-blue), #fff);
-      border:1px solid #dce8ff;
+      padding:16px;
+      background:linear-gradient(180deg, #f8fbff, #fff);
     }
 
-    .feature b{
+    .step b{
       display:block;
       margin-bottom:6px;
       font-size:15px;
       color:#173265;
     }
 
-    .feature span{
-      color:#41566f;
-      line-height:1.55;
+    .step span{
+      color:#475569;
+      line-height:1.5;
       font-size:14px;
     }
 
-    .footer-note{
-      margin-top:18px;
-      font-size:13px;
-      color:#d9e4f8;
-      line-height:1.5;
-    }
-
-    @media (max-width: 900px){
-      .hero{
-        grid-template-columns:1fr;
-      }
-
-      h1{
-        font-size:36px;
-      }
+    @media (max-width: 920px){
+      .hero{ grid-template-columns:1fr; }
+      h1{ font-size:38px; }
+      .how{ grid-template-columns:1fr 1fr; }
     }
 
     @media (max-width: 640px){
-      .grid,
-      .collections{
-        grid-template-columns:1fr;
-      }
-
-      .wrap{
-        padding:18px 12px 30px;
-      }
-
-      .panel,
-      .card{
-        padding:18px;
-      }
+      .grid, .collections, .how{ grid-template-columns:1fr; }
+      .wrap{ padding:18px 12px 28px; }
+      .panel, .card{ padding:18px; }
     }
   </style>
 </head>
@@ -316,25 +289,23 @@
   <div class="wrap">
     <div class="hero">
       <section class="panel">
-        <div class="eyebrow">Scripture Quiz Game</div>
+        <div class="eyebrow">Scripture Quiz</div>
         <h1>Scripture Baseball</h1>
         <p class="hero-copy">
-          Read a verse, identify the book it comes from, then guess the chapter. Choose your language, set the difficulty, and play as long as you like.
+          Read a verse. Name the book. Then name the chapter — or section in Doctrine and Covenants.
         </p>
 
         <div class="chips">
-          <div class="chip">Book guess: 5 points</div>
-          <div class="chip">Chapter guess: 10 points</div>
+          <div class="chip">Book: 5 points</div>
+          <div class="chip">Chapter/Section: 10 points</div>
           <div class="chip">Multiple languages</div>
-          <div class="chip">Difficulty-based answer sets</div>
+          <div class="chip">Difficulty-based choices</div>
         </div>
       </section>
 
       <section class="card">
-        <h2>Start a game</h2>
-        <p class="sub">
-          Choose a language, a difficulty, and the standard work collection you want to play from.
-        </p>
+        <h2>Start</h2>
+        <p class="sub">Choose a language, difficulty, and collection.</p>
 
         <div class="grid">
           <div>
@@ -363,7 +334,7 @@
           </div>
         </div>
 
-        <div class="section-title">Standard Work Collection</div>
+        <div class="section-title">Collection</div>
         <div class="collections" id="collections"></div>
 
         <div class="start-area">
@@ -373,61 +344,37 @@
       </section>
     </div>
 
-    <div style="margin-top:18px" class="card">
+    <section class="card" style="margin-top:18px;">
       <h2>How to play</h2>
-      <div class="feature-list">
-        <div class="feature">
-          <b>1. Read the verse</b>
-          <span>The verse text appears with the reference hidden.</span>
+      <div class="how">
+        <div class="step">
+          <b>Read</b>
+          <span>The verse appears with its reference hidden.</span>
         </div>
-        <div class="feature">
-          <b>2. Guess the book</b>
-          <span>Your answer choices are based on the selected difficulty.</span>
+        <div class="step">
+          <b>Guess</b>
+          <span>Pick the correct book, or jump straight to section in Doctrine and Covenants.</span>
         </div>
-        <div class="feature">
-          <b>3. Guess the chapter</b>
-          <span>After the book guess, the correct book is shown before you choose a chapter.</span>
+        <div class="step">
+          <b>Finish</b>
+          <span>Choose the chapter or section from ordered answer choices.</span>
         </div>
-        <div class="feature">
-          <b>4. Keep building your score</b>
-          <span>Track your score, streak, and personal best as you move from verse to verse.</span>
+        <div class="step">
+          <b>Build</b>
+          <span>Track your score, streak, and recent rounds.</span>
         </div>
       </div>
-
-      <div class="footer-note">
-        This game works best with short, focused rounds. You can keep playing indefinitely.
-      </div>
-    </div>
+    </section>
   </div>
 
   <script>
     (function () {
       const COLLECTIONS = [
-        {
-          code: "BOM",
-          full: "Book of Mormon",
-          caption: "15 books from 1 Nephi through Moroni"
-        },
-        {
-          code: "DC",
-          full: "Doctrine and Covenants",
-          caption: "Sections and Official Declarations"
-        },
-        {
-          code: "NT",
-          full: "New Testament",
-          caption: "From Matthew through Revelation"
-        },
-        {
-          code: "OT",
-          full: "Old Testament",
-          caption: "From Genesis through Malachi"
-        },
-        {
-          code: "PGP",
-          full: "Pearl of Great Price",
-          caption: "Moses, Abraham, Joseph Smith, and more"
-        }
+        { code: "BOM", full: "Book of Mormon", caption: "1 Nephi through Moroni" },
+        { code: "DC", full: "Doctrine and Covenants", caption: "Sections and Official Declarations" },
+        { code: "NT", full: "New Testament", caption: "Matthew through Revelation" },
+        { code: "OT", full: "Old Testament", caption: "Genesis through Malachi" },
+        { code: "PGP", full: "Pearl of Great Price", caption: "Moses, Abraham, Joseph Smith, and more" }
       ];
 
       const languageEl = document.getElementById("language");
@@ -477,7 +424,7 @@
 
       startBtn.addEventListener("click", function () {
         if (!selectedCollection) {
-          statusMsg.textContent = "Choose a collection to begin.";
+          statusMsg.textContent = "Choose a collection.";
           return;
         }
 

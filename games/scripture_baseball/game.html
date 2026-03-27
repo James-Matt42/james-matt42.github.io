@@ -14,7 +14,6 @@
       --muted:#64748b;
       --line:#d8e2ee;
       --blue:#2563eb;
-      --blue-2:#1d4ed8;
       --green:#16a34a;
       --green-soft:#ecfdf5;
       --red:#dc2626;
@@ -26,7 +25,6 @@
     }
 
     *{box-sizing:border-box}
-
     body{
       margin:0;
       font-family:Arial, Helvetica, sans-serif;
@@ -39,7 +37,7 @@
     }
 
     .wrap{
-      max-width:1220px;
+      max-width:1260px;
       margin:0 auto;
       padding:22px 16px 38px;
     }
@@ -111,7 +109,7 @@
 
     .layout{
       display:grid;
-      grid-template-columns:1.25fr .75fr;
+      grid-template-columns:1.2fr .8fr;
       gap:16px;
       align-items:start;
     }
@@ -171,7 +169,7 @@
 
     .prompt{
       margin-top:18px;
-      font-size:21px;
+      font-size:20px;
       line-height:1.25;
       font-weight:800;
       letter-spacing:-.02em;
@@ -230,9 +228,7 @@
       color:#1e40af;
     }
 
-    .choice:disabled{
-      cursor:default;
-    }
+    .choice:disabled{ cursor:default; }
 
     .feedback{
       margin-top:16px;
@@ -324,15 +320,15 @@
     }
 
     .summary-box{
-      background:linear-gradient(180deg, #fffaf0, #ffffff);
-      border:1px solid #f3dfb4;
+      background:linear-gradient(180deg, #f5f9ff, #ffffff);
+      border:1px solid #d9e8ff;
       border-radius:18px;
       padding:14px;
     }
 
-    .summary-box.blue{
-      background:linear-gradient(180deg, #f5f9ff, #ffffff);
-      border-color:#d9e8ff;
+    .summary-box.gold{
+      background:linear-gradient(180deg, #fffaf0, #ffffff);
+      border-color:#f3dfb4;
     }
 
     .summary-box b{
@@ -354,6 +350,55 @@
       line-height:1.55;
     }
 
+    .history{
+      display:grid;
+      gap:10px;
+      max-height:420px;
+      overflow:auto;
+      padding-right:2px;
+    }
+
+    .history-item{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:linear-gradient(180deg, #f8fbff, #ffffff);
+    }
+
+    .history-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:6px;
+    }
+
+    .history-ref{
+      font-weight:800;
+      color:#173265;
+      font-size:14px;
+    }
+
+    .history-score{
+      font-weight:800;
+      color:#92400e;
+      background:#fff7e8;
+      border:1px solid #f5deb3;
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .history-line{
+      font-size:13px;
+      color:#475569;
+      line-height:1.45;
+    }
+
+    .ok{ color:#166534; font-weight:700; }
+    .bad{ color:#991b1b; font-weight:700; }
+
     .error-box{
       background:#fff;
       color:#7f1d1d;
@@ -363,14 +408,10 @@
       box-shadow:0 10px 28px rgba(0,0,0,.10);
     }
 
-    .hidden{
-      display:none !important;
-    }
+    .hidden{ display:none !important; }
 
     @media (max-width: 980px){
-      .layout{
-        grid-template-columns:1fr;
-      }
+      .layout{ grid-template-columns:1fr; }
     }
 
     @media (max-width: 700px){
@@ -379,30 +420,16 @@
         grid-template-columns:1fr;
       }
 
-      .verse-text{
-        font-size:19px;
-      }
-
-      .prompt{
-        font-size:18px;
-      }
-
-      .top-copy h1{
-        font-size:30px;
-      }
-
-      .wrap{
-        padding:16px 12px 28px;
-      }
-
-      .card{
-        padding:16px;
-      }
+      .verse-text{ font-size:19px; }
+      .prompt{ font-size:18px; }
+      .top-copy h1{ font-size:30px; }
+      .wrap{ padding:16px 12px 28px; }
+      .card{ padding:16px; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap" id="app">
+  <div class="wrap">
     <div class="topbar">
       <div class="top-copy">
         <h1>Scripture Baseball</h1>
@@ -411,7 +438,7 @@
 
       <div class="top-actions">
         <a class="btn-link" href="./index.html">Change Settings</a>
-        <button class="secondary-btn" id="skipBtn">Skip Verse</button>
+        <button class="secondary-btn" id="skipBtn">Skip</button>
         <button class="primary-btn hidden" id="nextBtn">Next Verse</button>
       </div>
     </div>
@@ -424,7 +451,6 @@
 
         <div class="verse-panel">
           <div class="phase" id="phasePill">Loading</div>
-
           <p class="verse-text" id="verseText"></p>
 
           <div class="prompt" id="promptText"></div>
@@ -443,10 +469,10 @@
 
       <aside class="sidebar-grid">
         <section class="card">
-          <h2 class="section-title">Score</h2>
+          <h2 class="section-title">Stats</h2>
           <div class="stats">
             <div class="stat">
-              <div class="stat-label">Total Score</div>
+              <div class="stat-label">Score</div>
               <div class="stat-value" id="scoreValue">0</div>
             </div>
             <div class="stat">
@@ -454,46 +480,47 @@
               <div class="stat-value" id="roundValue">1</div>
             </div>
             <div class="stat">
-              <div class="stat-label">Current Streak</div>
+              <div class="stat-label">Streak</div>
               <div class="stat-value" id="streakValue">0</div>
             </div>
             <div class="stat">
-              <div class="stat-label">Best Streak</div>
+              <div class="stat-label">Best</div>
               <div class="stat-value" id="bestStreakValue">0</div>
             </div>
             <div class="stat">
-              <div class="stat-label">Book Correct</div>
+              <div class="stat-label">Books</div>
               <div class="stat-value" id="bookCorrectValue">0</div>
             </div>
             <div class="stat">
-              <div class="stat-label">Chapter Correct</div>
+              <div class="stat-label">Chapters / Sections</div>
               <div class="stat-value" id="chapterCorrectValue">0</div>
             </div>
           </div>
         </section>
 
         <section class="card">
-          <h2 class="section-title">Round Summary</h2>
+          <h2 class="section-title">Round Result</h2>
           <div class="summary">
-            <div class="summary-box blue">
-              <b>Book Guess</b>
-              <span id="bookSummary">Waiting for your answer.</span>
+            <div class="summary-box">
+              <b>Book</b>
+              <span id="bookSummary">Waiting…</span>
             </div>
             <div class="summary-box">
-              <b>Chapter Guess</b>
-              <span id="chapterSummary">Waiting for your answer.</span>
+              <b>Chapter / Section</b>
+              <span id="chapterSummary">Waiting…</span>
             </div>
-            <div class="tiny">
-              Correct book: 5 points<br>
-              Correct chapter: 10 points
+            <div class="summary-box gold">
+              <b>Round Score</b>
+              <span id="roundScoreSummary">+0</span>
             </div>
+            <div class="tiny" id="modeNote">Book = 5 points • Chapter/Section = 10 points</div>
           </div>
         </section>
 
         <section class="card">
-          <h2 class="section-title">Tips</h2>
-          <div class="tiny">
-            The book choices and chapter choices change with the selected difficulty. The correct book is shown before the chapter guess, and the full reference is shown after the chapter guess.
+          <h2 class="section-title">Recent Rounds</h2>
+          <div class="history" id="historyList">
+            <div class="tiny">No rounds yet.</div>
           </div>
         </section>
       </aside>
@@ -581,11 +608,16 @@
 
       const bookSummary = document.getElementById("bookSummary");
       const chapterSummary = document.getElementById("chapterSummary");
+      const roundScoreSummary = document.getElementById("roundScoreSummary");
+      const modeNote = document.getElementById("modeNote");
+      const historyList = document.getElementById("historyList");
 
       const nextBtn = document.getElementById("nextBtn");
       const nextBtnInline = document.getElementById("nextBtnInline");
       const afterRoundActions = document.getElementById("afterRoundActions");
       const skipBtn = document.getElementById("skipBtn");
+
+      const isDC = work === "DC";
 
       const state = {
         verses: [],
@@ -601,7 +633,9 @@
         phase: "book",
         usedRefs: new Set(),
         roundGotBook: false,
-        roundGotChapter: false
+        roundGotChapter: false,
+        roundScore: 0,
+        history: []
       };
 
       const storageKey = "scripture_baseball_" + work + "_" + lang + "_" + difficulty;
@@ -722,13 +756,11 @@
       }
 
       function getSavedHighScore() {
-        const data = getSavedData();
-        return Number(data.highScore || 0);
+        return Number(getSavedData().highScore || 0);
       }
 
       function getSavedBestStreak() {
-        const data = getSavedData();
-        return Number(data.bestStreak || 0);
+        return Number(getSavedData().bestStreak || 0);
       }
 
       function updateTopText() {
@@ -759,11 +791,43 @@
         bestStreakValue.textContent = String(state.bestStreak);
         bookCorrectValue.textContent = String(state.bookCorrect);
         chapterCorrectValue.textContent = String(state.chapterCorrect);
+
+        if (isDC) {
+          modeNote.textContent = "Section = 10 points";
+        } else {
+          modeNote.textContent = "Book = 5 points • Chapter = 10 points";
+        }
+      }
+
+      function renderHistory() {
+        if (!state.history.length) {
+          historyList.innerHTML = '<div class="tiny">No rounds yet.</div>';
+          return;
+        }
+
+        historyList.innerHTML = "";
+        for (const item of state.history) {
+          const row = document.createElement("div");
+          row.className = "history-item";
+          row.innerHTML =
+            '<div class="history-top">' +
+              '<div class="history-ref">' + escapeHtml(item.reference) + '</div>' +
+              '<div class="history-score">+' + item.points + '</div>' +
+            '</div>' +
+            (item.bookLine ? '<div class="history-line">' + item.bookLine + '</div>' : '') +
+            '<div class="history-line">' + item.chapterLine + '</div>';
+          historyList.appendChild(row);
+        }
       }
 
       function resetRoundSummary() {
-        bookSummary.textContent = "Waiting for your answer.";
-        chapterSummary.textContent = "Waiting for your answer.";
+        if (isDC) {
+          bookSummary.textContent = "Skipped in Doctrine and Covenants.";
+        } else {
+          bookSummary.textContent = "Waiting…";
+        }
+        chapterSummary.textContent = "Waiting…";
+        roundScoreSummary.textContent = "+0";
       }
 
       function nextVerse() {
@@ -771,7 +835,6 @@
         afterRoundActions.classList.add("hidden");
         referenceReveal.textContent = "";
         choicesEl.innerHTML = "";
-        resetRoundSummary();
 
         if (state.usedRefs.size >= state.verses.length) {
           state.usedRefs.clear();
@@ -783,9 +846,11 @@
         state.current = pool[Math.floor(Math.random() * pool.length)];
         state.usedRefs.add(state.current.reference);
 
-        state.phase = "book";
+        state.phase = isDC ? "chapter" : "book";
         state.roundGotBook = false;
         state.roundGotChapter = false;
+        state.roundScore = 0;
+        resetRoundSummary();
 
         renderRound();
         renderMeta();
@@ -796,34 +861,86 @@
         verseText.textContent = verse.text;
 
         if (state.phase === "book") {
-          phasePill.textContent = "Book Guess";
-          promptText.textContent = "Which book is this verse from?";
-          helperText.textContent = "Select the correct book from the choices below.";
+          phasePill.textContent = "Book";
+          promptText.textContent = "Which book?";
+          helperText.textContent = "Choose the correct book.";
           feedbackEl.className = "feedback info";
-          feedbackEl.textContent = "A correct book guess is worth 5 points.";
+          feedbackEl.textContent = "Book guess: 5 points.";
 
-          const choiceCount = getChoiceCount();
-          const others = state.booksPresent.filter(book => book !== verse.book);
-          const pickedOthers = sampleDistinct(others, Math.max(0, choiceCount - 1));
-          const options = sortBooksInCanonOrder([verse.book, ...pickedOthers], work);
-
+          const options = buildBookOptions(verse.book);
           renderChoices(options.map(v => ({ label: v, value: v })), handleBookGuess);
         } else if (state.phase === "chapter") {
-          phasePill.textContent = "Chapter Guess";
-          promptText.textContent = "Which chapter is it from?";
-          helperText.textContent = "The correct book is " + verse.book + ".";
+          phasePill.textContent = isDC ? "Section" : "Chapter";
+          promptText.textContent = isDC ? "Which section?" : "Which chapter?";
+          helperText.textContent = isDC
+            ? "This verse is from Doctrine and Covenants."
+            : "Book: " + verse.book;
           feedbackEl.className = "feedback info";
-          feedbackEl.textContent = "A correct chapter guess is worth 10 points.";
+          feedbackEl.textContent = isDC ? "Section guess: 10 points." : "Chapter guess: 10 points.";
 
-          const maxChapter = state.chapterCounts[verse.book] || verse.chapter;
-          const allChapters = Array.from({ length: maxChapter }, (_, i) => i + 1);
-          const choiceCount = getChoiceCount();
-          const otherChapters = allChapters.filter(ch => ch !== verse.chapter);
-          const pickedOthers = sampleDistinct(otherChapters, Math.max(0, choiceCount - 1));
-          const options = [verse.chapter, ...pickedOthers].sort((a, b) => a - b);
-
+          const options = buildChapterOptions(verse.book, verse.chapter);
           renderChoices(options.map(v => ({ label: String(v), value: v })), handleChapterGuess);
         }
+      }
+
+      function buildBookOptions(correctBook) {
+        const choiceCount = getChoiceCount();
+        if (choiceCount === Infinity || choiceCount >= state.booksPresent.length) {
+          return state.booksPresent.slice();
+        }
+
+        const canon = state.booksPresent;
+        const correctIndex = canon.indexOf(correctBook);
+        const distractors = [];
+
+        for (let offset = 1; offset < canon.length; offset++) {
+          const left = correctIndex - offset;
+          const right = correctIndex + offset;
+          if (left >= 0) distractors.push(canon[left]);
+          if (right < canon.length) distractors.push(canon[right]);
+        }
+
+        const uniqueDistractors = [];
+        for (const item of distractors) {
+          if (item !== correctBook && !uniqueDistractors.includes(item)) uniqueDistractors.push(item);
+        }
+
+        const picked = uniqueDistractors.slice(0, Math.max(0, choiceCount - 1));
+        return sortBooksInCanonOrder([correctBook, ...picked], work);
+      }
+
+      function buildChapterOptions(book, correctChapter) {
+        const maxChapter = state.chapterCounts[book] || correctChapter;
+        const choiceCount = getChoiceCount();
+        const allChapters = Array.from({ length: maxChapter }, (_, i) => i + 1);
+
+        if (choiceCount === Infinity || choiceCount >= allChapters.length) {
+          return allChapters;
+        }
+
+        const distractors = [];
+        const seen = new Set([correctChapter]);
+
+        function tryAdd(val) {
+          if (val >= 1 && val <= maxChapter && !seen.has(val)) {
+            seen.add(val);
+            distractors.push(val);
+          }
+        }
+
+        const closeOffsets = [1, -1, 2, -2, 3, -3, 5, -5, 8, -8];
+        for (const off of closeOffsets) {
+          tryAdd(correctChapter + off);
+          if (distractors.length >= choiceCount - 1) break;
+        }
+
+        if (distractors.length < choiceCount - 1) {
+          const remaining = allChapters.filter(ch => !seen.has(ch));
+          const sampled = sampleDistinct(remaining, (choiceCount - 1) - distractors.length);
+          for (const ch of sampled) distractors.push(ch);
+        }
+
+        return [correctChapter, ...distractors].sort((a, b) => a - b);
       }
 
       function renderChoices(options, handler) {
@@ -833,7 +950,7 @@
           btn.className = "choice";
           btn.textContent = option.label;
           btn.addEventListener("click", function () {
-            handler(option.value, btn);
+            handler(option.value);
           });
           choicesEl.appendChild(btn);
         }
@@ -847,12 +964,9 @@
 
       function markBookChoices(selectedBook) {
         for (const btn of choicesEl.querySelectorAll(".choice")) {
-          if (btn.textContent === state.current.book) {
-            btn.classList.add("reveal");
-          }
+          if (btn.textContent === state.current.book) btn.classList.add("reveal");
           if (btn.textContent === selectedBook) {
-            if (selectedBook === state.current.book) btn.classList.add("correct");
-            else btn.classList.add("wrong");
+            btn.classList.add(selectedBook === state.current.book ? "correct" : "wrong");
           }
         }
       }
@@ -860,12 +974,9 @@
       function markChapterChoices(selectedChapter) {
         for (const btn of choicesEl.querySelectorAll(".choice")) {
           const value = Number(btn.textContent);
-          if (value === state.current.chapter) {
-            btn.classList.add("reveal");
-          }
+          if (value === state.current.chapter) btn.classList.add("reveal");
           if (value === selectedChapter) {
-            if (selectedChapter === state.current.chapter) btn.classList.add("correct");
-            else btn.classList.add("wrong");
+            btn.classList.add(selectedChapter === state.current.chapter ? "correct" : "wrong");
           }
         }
       }
@@ -879,8 +990,23 @@
           state.streak = 0;
         }
 
+        const historyItem = {
+          reference: state.current.reference,
+          points: state.roundScore,
+          bookLine: isDC ? "" : (state.roundGotBook
+            ? '<span class="ok">Book correct</span>'
+            : '<span class="bad">Book missed</span>'),
+          chapterLine: state.roundGotChapter
+            ? '<span class="ok">' + (isDC ? 'Section correct' : 'Chapter correct') + '</span>'
+            : '<span class="bad">' + (isDC ? 'Section missed' : 'Chapter missed') + '</span>'
+        };
+
+        state.history.unshift(historyItem);
+        state.history = state.history.slice(0, 10);
+
         saveStats();
         renderMeta();
+        renderHistory();
 
         nextBtn.classList.remove("hidden");
         afterRoundActions.classList.remove("hidden");
@@ -894,32 +1020,24 @@
           state.score += 5;
           state.bookCorrect += 1;
           state.roundGotBook = true;
+          state.roundScore += 5;
 
-          feedbackEl.className = "feedback good";
-          feedbackEl.innerHTML =
-            "<strong>Correct.</strong> This verse is from <strong>" +
-            escapeHtml(state.current.book) +
-            "</strong>. Now guess the chapter.";
-
-          bookSummary.innerHTML =
-            "Correct — <strong>" + escapeHtml(state.current.book) + "</strong> (+5)";
+          feedbackEl.className = "feedback.good".replace(".", " ");
+          feedbackEl.innerHTML = "<strong>Correct:</strong> " + escapeHtml(state.current.book);
+          bookSummary.innerHTML = 'Correct — <strong>' + escapeHtml(state.current.book) + '</strong> (+5)';
         } else {
           feedbackEl.className = "feedback bad";
-          feedbackEl.innerHTML =
-            "Not quite. The correct book is <strong>" +
-            escapeHtml(state.current.book) +
-            "</strong>. Now guess the chapter.";
-
-          bookSummary.innerHTML =
-            "Incorrect — correct answer: <strong>" + escapeHtml(state.current.book) + "</strong>";
+          feedbackEl.innerHTML = "<strong>Correct book:</strong> " + escapeHtml(state.current.book);
+          bookSummary.innerHTML = 'Missed — <strong>' + escapeHtml(state.current.book) + '</strong>';
         }
 
+        roundScoreSummary.textContent = "+" + state.roundScore;
         state.phase = "chapter";
         renderMeta();
 
         setTimeout(function () {
           renderRound();
-        }, 850);
+        }, 700);
       }
 
       function handleChapterGuess(selectedChapter) {
@@ -930,25 +1048,21 @@
           state.score += 10;
           state.chapterCorrect += 1;
           state.roundGotChapter = true;
+          state.roundScore += 10;
 
           feedbackEl.className = "feedback good";
-          feedbackEl.innerHTML =
-            "<strong>Correct.</strong> The chapter is <strong>" +
-            state.current.chapter +
-            "</strong>.";
+          feedbackEl.innerHTML = "<strong>Correct:</strong> " + state.current.chapter;
           chapterSummary.innerHTML =
-            "Correct — chapter <strong>" + state.current.chapter + "</strong> (+10)";
+            'Correct — <strong>' + (isDC ? 'Section ' : 'Chapter ') + state.current.chapter + '</strong> (+10)';
         } else {
           feedbackEl.className = "feedback bad";
-          feedbackEl.innerHTML =
-            "Not quite. The correct chapter is <strong>" +
-            state.current.chapter +
-            "</strong>.";
+          feedbackEl.innerHTML = "<strong>Correct " + (isDC ? "section" : "chapter") + ":</strong> " + state.current.chapter;
           chapterSummary.innerHTML =
-            "Incorrect — correct answer: <strong>" + state.current.chapter + "</strong>";
+            'Missed — <strong>' + (isDC ? 'Section ' : 'Chapter ') + state.current.chapter + '</strong>';
         }
 
         referenceReveal.textContent = "Reference: " + state.current.reference;
+        roundScoreSummary.textContent = "+" + state.roundScore;
         state.phase = "done";
         state.round += 1;
         finishRound();
@@ -980,12 +1094,12 @@
         try {
           state.verses = await loadData();
           buildIndexes();
-
           state.bestStreak = getSavedBestStreak();
 
           errorMount.classList.add("hidden");
           gameLayout.classList.remove("hidden");
           renderMeta();
+          renderHistory();
           nextVerse();
         } catch (err) {
           showError(err && err.message ? err.message : "Unknown error loading scripture data.");
