@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Scripture Baseball - Game</title>
+  <style>
+    :root{
+      --bg1:#0a1220;
+      --bg2:#13223d;
+      --panel:#ffffff;
+      --ink:#172033;
+      --muted:#64748b;
+      --line:#dbe4f0;
+      --blue:#2563eb;
+      --blue2:#1d4ed8;
+      --green:#16a34a;
+      --gold:#f59e0b;
+      --red:#dc2626;
+      --soft:#f8fbff;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:#fff;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(255,255,255,.09), transparent 24%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      min-height:100vh;
+    }
+
+    .wrap{
+      max-width:1220px;
+      margin:0 auto;
+      padding:20px 16px 42px;
+    }
+
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .title h1{
+      margin:0;
+      font-size:34px;
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+
+    .subtitle{
+      color:#d5e1f6;
+      font-size:14px;
+    }
+
+    .top-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .ghost-link, .next-btn{
+      text-decoration:none;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:11px 14px;
+      font-weight:700;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+
+    .next-btn{
+      border:none;
+      background:linear-gradient(180deg, var(--gold), #d97706);
+      box-shadow:0 10px 24px rgba(245,158,11,.24);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.25fr .75fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      background:#fff;
+      color:var(--ink);
+      border-radius:22px;
+      border:1px solid rgba(0,0,0,.05);
+      box-shadow:0 14px 34px rgba(0,0,0,.12);
+      padding:18px;
+    }
+
+    .panel h2, .panel h3{
+      margin:0;
+      line-height:1.15;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:14px;
+    }
+
+    .chip{
+      background:#eef5ff;
+      color:#1d4ed8;
+      border:1px solid #cfe0ff;
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .score-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .score-card{
+      background:var(--soft);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .score-label{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+      margin-bottom:6px;
+      font-weight:700;
+    }
+
+    .score-value{
+      font-size:28px;
+      font-weight:800;
+      line-height:1;
+    }
+
+    .bases{
+      display:grid;
+      place-items:center;
+      margin-top:14px;
+      padding:14px 0 4px;
+    }
+
+    .diamond{
+      position:relative;
+      width:154px;
+      height:154px;
+      transform:rotate(45deg);
+    }
+
+    .base{
+      position:absolute;
+      width:36px;
+      height:36px;
+      border-radius:8px;
+      border:2px solid #b9c9df;
+      background:#fff;
+    }
+
+    .base.active{
+      background:#fde68a;
+      border-color:#f59e0b;
+      box-shadow:0 0 0 5px rgba(245,158,11,.16);
+    }
+
+    .base.home{left:59px; bottom:-2px}
+    .base.first{right:-2px; top:59px}
+    .base.second{left:59px; top:-2px}
+    .base.third{left:-2px; top:59px}
+
+    .inning-text{
+      margin-top:12px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .verse-card{
+      background:linear-gradient(180deg, #f8fbff, #fff);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      margin-top:14px;
+    }
+
+    .phase{
+      display:inline-block;
+      margin-bottom:12px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:#eff6ff;
+      color:#1d4ed8;
+      border:1px solid #cfe0ff;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .verse-text{
+      font-size:21px;
+      line-height:1.6;
+      margin:0;
+    }
+
+    .prompt{
+      margin-top:18px;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .helper{
+      margin-top:8px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .choices{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .choice{
+      width:100%;
+      text-align:left;
+      border:2px solid var(--line);
+      background:#fff;
+      color:var(--ink);
+      border-radius:16px;
+      padding:14px 14px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:.14s ease;
+      min-height:56px;
+    }
+
+    .choice:hover:not(:disabled){
+      transform:translateY(-1px);
+      border-color:#9dbefb;
+      box-shadow:0 8px 18px rgba(37,99,235,.10);
+    }
+
+    .choice.correct{
+      background:#ecfdf5;
+      border-color:#86efac;
+      color:#166534;
+    }
+
+    .choice.wrong{
+      background:#fef2f2;
+      border-color:#fca5a5;
+      color:#991b1b;
+    }
+
+    .choice.reveal{
+      background:#eff6ff;
+      border-color:#93c5fd;
+      color:#1e40af;
+    }
+
+    .choice:disabled{
+      cursor:default;
+    }
+
+    .feedback{
+      margin-top:16px;
+      border-radius:16px;
+      padding:14px;
+      background:#f8fbff;
+      border:1px solid var(--line);
+      line-height:1.55;
+      min-height:58px;
+    }
+
+    .feedback.good{
+      background:#ecfdf5;
+      border-color:#86efac;
+      color:#166534;
+    }
+
+    .feedback.bad{
+      background:#fef2f2;
+      border-color:#fca5a5;
+      color:#991b1b;
+    }
+
+    .feedback.info{
+      background:#eff6ff;
+      border-color:#93c5fd;
+      color:#1e40af;
+    }
+
+    .reference{
+      margin-top:14px;
+      font-size:15px;
+      font-weight:800;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .error-box{
+      background:#fff;
+      color:#7f1d1d;
+      border:1px solid #fecaca;
+      border-radius:20px;
+      padding:18px;
+      box-shadow:0 10px 28px rgba(0,0,0,.10);
+    }
+
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 700px){
+      .choices{grid-template-columns:1fr}
+      .verse-text{font-size:18px}
+      .title h1{font-size:28px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+    <div class="topbar">
+      <div class="title">
+        <h1>Scripture Baseball</h1>
+        <div class="subtitle" id="subtitle">Loading game...</div>
+      </div>
+      <div class="top-actions">
+        <a class="ghost-link" href="./index.html">Change Settings</a>
+        <button class="next-btn" id="nextBtn" style="display:none;">Next Verse</button>
+      </div>
+    </div>
+
+    <div id="errorMount" style="display:none;"></div>
+
+    <div class="grid" id="gameGrid" style="display:none;">
+      <main class="panel">
+        <div class="meta" id="meta"></div>
+
+        <div class="verse-card">
+          <div class="phase" id="phasePill">Round</div>
+          <p class="verse-text" id="verseText"></p>
+
+          <div class="prompt" id="promptText"></div>
+          <div class="helper" id="helperText"></div>
+
+          <div class="choices" id="choices"></div>
+
+          <div class="feedback info" id="feedback">Loading a verse...</div>
+          <div class="reference" id="referenceReveal"></div>
+        </div>
+      </main>
+
+      <aside class="panel">
+        <h2>Scoreboard</h2>
+
+        <div class="score-grid">
+          <div class="score-card">
+            <div class="score-label">Score</div>
+            <div class="score-value" id="scoreValue">0</div>
+          </div>
+          <div class="score-card">
+            <div class="score-label">Round</div>
+            <div class="score-value" id="roundValue">1</div>
+          </div>
+          <div class="score-card">
+            <div class="score-label">Book Correct</div>
+            <div class="score-value" id="bookCorrectValue">0</div>
+          </div>
+          <div class="score-card">
+            <div class="score-label">Chapter Correct</div>
+            <div class="score-value" id="chapterCorrectValue">0</div>
+          </div>
+        </div>
+
+        <div class="bases">
+          <div class="diamond">
+            <div class="base home"></div>
+            <div class="base first" id="base1"></div>
+            <div class="base second" id="base2"></div>
+            <div class="base third" id="base3"></div>
+          </div>
+        </div>
+
+        <div class="inning-text" id="inningText">
+          Get the book right to reach first base. Get the chapter right to drive in more runs.
+        </div>
+
+        <div style="margin-top:18px">
+          <h3>How scoring works</h3>
+          <div class="small" style="margin-top:10px">
+            Correct book = 5 points<br>
+            Correct chapter = 10 points<br>
+            The correct book is shown after the book guess.<br>
+            The full reference is shown after the chapter guess.
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const WORK_FULL = {
+        BOM: "Book of Mormon",
+        DC: "Doctrine and Covenants",
+        NT: "New Testament",
+        OT: "Old Testament",
+        PGP: "Pearl of Great Price"
+      };
+
+      const LANGUAGE_FULL = {
+        eng: "English",
+        spa: "Spanish",
+        deu: "German",
+        por: "Portuguese",
+        fra: "French",
+        ita: "Italian",
+        zhs: "Chinese (Simplified)",
+        vie: "Vietnamese"
+      };
+
+      const DIFFICULTY_COUNT = {
+        easy: 2,
+        medium: 4,
+        hard: 8,
+        "extra-hard": 16,
+        "exceedingly-hard": Infinity
+      };
+
+      const BOOK_ORDERS = {
+        BOM: [
+          "1 Nephi","2 Nephi","Jacob","Enos","Jarom","Omni","Words of Mormon","Mosiah",
+          "Alma","Helaman","3 Nephi","4 Nephi","Mormon","Ether","Moroni"
+        ],
+        DC: [
+          "Doctrine and Covenants","Official Declarations"
+        ],
+        NT: [
+          "Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians",
+          "Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy",
+          "2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John",
+          "3 John","Jude","Revelation"
+        ],
+        OT: [
+          "Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth",
+          "1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah",
+          "Esther","Job","Psalms","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah",
+          "Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum",
+          "Habakkuk","Zephaniah","Haggai","Zechariah","Malachi"
+        ],
+        PGP: [
+          "Moses","Abraham","Joseph Smith—Matthew","Joseph Smith—History","Articles of Faith"
+        ]
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      const work = params.get("work") || "BOM";
+      const lang = params.get("lang") || "eng";
+      const difficulty = params.get("difficulty") || "medium";
+
+      const subtitle = document.getElementById("subtitle");
+      const errorMount = document.getElementById("errorMount");
+      const gameGrid = document.getElementById("gameGrid");
+      const meta = document.getElementById("meta");
+      const verseText = document.getElementById("verseText");
+      const promptText = document.getElementById("promptText");
+      const helperText = document.getElementById("helperText");
+      const phasePill = document.getElementById("phasePill");
+      const choicesEl = document.getElementById("choices");
+      const feedbackEl = document.getElementById("feedback");
+      const referenceReveal = document.getElementById("referenceReveal");
+      const nextBtn = document.getElementById("nextBtn");
+
+      const scoreValue = document.getElementById("scoreValue");
+      const roundValue = document.getElementById("roundValue");
+      const bookCorrectValue = document.getElementById("bookCorrectValue");
+      const chapterCorrectValue = document.getElementById("chapterCorrectValue");
+
+      const base1 = document.getElementById("base1");
+      const base2 = document.getElementById("base2");
+      const base3 = document.getElementById("base3");
+      const inningText = document.getElementById("inningText");
+
+      const state = {
+        verses: [],
+        booksPresent: [],
+        chapterCounts: {},
+        score: 0,
+        round: 1,
+        bookCorrect: 0,
+        chapterCorrect: 0,
+        current: null,
+        phase: "book",
+        usedRefs: new Set(),
+        bases: 0,
+        runs: 0
+      };
+
+      function showError(message) {
+        subtitle.textContent = "Could not load game";
+        errorMount.style.display = "";
+        errorMount.innerHTML = '<div class="error-box"><strong>Problem:</strong> ' + escapeHtml(message) + '</div>';
+        gameGrid.style.display = "none";
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
+      function shuffle(arr) {
+        const copy = arr.slice();
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function sampleDistinct(arr, count) {
+        if (count >= arr.length) return arr.slice();
+        return shuffle(arr).slice(0, count);
+      }
+
+      function sortBooksInCanonOrder(books, workCode) {
+        const order = BOOK_ORDERS[workCode] || [];
+        const rank = new Map(order.map((name, idx) => [name, idx]));
+        return books.slice().sort((a, b) => {
+          const ra = rank.has(a) ? rank.get(a) : 9999;
+          const rb = rank.has(b) ? rank.get(b) : 9999;
+          if (ra !== rb) return ra - rb;
+          return a.localeCompare(b);
+        });
+      }
+
+      function parseLine(line) {
+        const parts = line.split("\t");
+        if (parts.length < 2) return null;
+
+        const ref = parts[0].trim();
+        const text = parts.slice(1).join("\t").trim();
+        if (!ref || !text) return null;
+
+        const match = ref.match(/^(.*?)\s+(\d+):(\d+)$/);
+        if (!match) return null;
+
+        return {
+          reference: ref,
+          book: match[1].trim(),
+          chapter: Number(match[2]),
+          verse: Number(match[3]),
+          text
+        };
+      }
+
+      async function loadData() {
+        const url = new URL('../../data/standard_works/' + work + '_' + lang + '.txt', window.location.href).href;
+        const res = await fetch(url, { cache: "no-store" });
+
+        if (!res.ok) {
+          throw new Error('Could not fetch ' + url);
+        }
+
+        const raw = await res.text();
+        const verses = raw
+          .split(/\r?\n/)
+          .map(parseLine)
+          .filter(Boolean);
+
+        if (!verses.length) {
+          throw new Error('No verses were found in the data file.');
+        }
+
+        return verses;
+      }
+
+      function buildIndexes() {
+        const presentSet = new Set();
+        const chapterCounts = {};
+
+        for (const verse of state.verses) {
+          presentSet.add(verse.book);
+          chapterCounts[verse.book] = Math.max(chapterCounts[verse.book] || 0, verse.chapter);
+        }
+
+        state.booksPresent = sortBooksInCanonOrder(Array.from(presentSet), work);
+        state.chapterCounts = chapterCounts;
+      }
+
+      function getChoiceCount() {
+        return DIFFICULTY_COUNT[difficulty] ?? 4;
+      }
+
+      function nextVerse() {
+        nextBtn.style.display = "none";
+        referenceReveal.textContent = "";
+        feedbackEl.className = "feedback info";
+
+        if (state.usedRefs.size >= state.verses.length) {
+          state.usedRefs.clear();
+        }
+
+        let pool = state.verses.filter(v => !state.usedRefs.has(v.reference));
+        if (!pool.length) pool = state.verses.slice();
+
+        state.current = pool[Math.floor(Math.random() * pool.length)];
+        state.usedRefs.add(state.current.reference);
+        state.phase = "book";
+
+        renderMeta();
+        renderRound();
+      }
+
+      function renderMeta() {
+        subtitle.textContent =
+          (WORK_FULL[work] || work) + " • " +
+          (LANGUAGE_FULL[lang] || lang) + " • " +
+          difficulty.replaceAll("-", " ").replace(/\b\w/g, m => m.toUpperCase());
+
+        meta.innerHTML = "";
+        const items = [
+          WORK_FULL[work] || work,
+          LANGUAGE_FULL[lang] || lang,
+          difficulty.replaceAll("-", " ").replace(/\b\w/g, m => m.toUpperCase())
+        ];
+        for (const item of items) {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.textContent = item;
+          meta.appendChild(chip);
+        }
+
+        scoreValue.textContent = String(state.score);
+        roundValue.textContent = String(state.round);
+        bookCorrectValue.textContent = String(state.bookCorrect);
+        chapterCorrectValue.textContent = String(state.chapterCorrect);
+
+        base1.classList.toggle("active", state.bases >= 1);
+        base2.classList.toggle("active", state.bases >= 2);
+        base3.classList.toggle("active", state.bases >= 3);
+        inningText.textContent = "Runs scored this session: " + state.runs;
+      }
+
+      function renderRound() {
+        const verse = state.current;
+        verseText.textContent = verse.text;
+        choicesEl.innerHTML = "";
+
+        if (state.phase === "book") {
+          phasePill.textContent = "Book Guess";
+          promptText.textContent = "Which book is this verse from?";
+          helperText.textContent = "Choose from the book buttons below.";
+          feedbackEl.textContent = "A correct book guess is worth 5 points.";
+          feedbackEl.className = "feedback info";
+
+          const choiceCount = getChoiceCount();
+          const others = state.booksPresent.filter(book => book !== verse.book);
+          const pickedOthers = sampleDistinct(others, Math.max(0, choiceCount - 1));
+          const options = sortBooksInCanonOrder([verse.book, ...pickedOthers], work);
+
+          for (const option of options) {
+            const btn = document.createElement("button");
+            btn.className = "choice";
+            btn.textContent = option;
+            btn.addEventListener("click", function () {
+              handleBookGuess(option, btn);
+            });
+            choicesEl.appendChild(btn);
+          }
+        } else if (state.phase === "chapter") {
+          phasePill.textContent = "Chapter Guess";
+          promptText.textContent = "Which chapter is it from?";
+          helperText.textContent = "The correct book is " + verse.book + ".";
+          feedbackEl.textContent = "A correct chapter guess is worth 10 points.";
+          feedbackEl.className = "feedback info";
+
+          const maxChapter = state.chapterCounts[verse.book] || verse.chapter;
+          const allChapters = Array.from({ length: maxChapter }, (_, i) => i + 1);
+          const choiceCount = getChoiceCount();
+          const otherChapters = allChapters.filter(ch => ch !== verse.chapter);
+          const pickedOthers = sampleDistinct(otherChapters, Math.max(0, choiceCount - 1));
+          const options = [verse.chapter, ...pickedOthers].sort((a, b) => a - b);
+
+          for (const option of options) {
+            const btn = document.createElement("button");
+            btn.className = "choice";
+            btn.textContent = String(option);
+            btn.addEventListener("click", function () {
+              handleChapterGuess(option, btn);
+            });
+            choicesEl.appendChild(btn);
+          }
+        } else {
+          phasePill.textContent = "Reference Revealed";
+          promptText.textContent = "Round complete";
+          helperText.textContent = "Click Next Verse to keep playing.";
+        }
+      }
+
+      function disableChoices() {
+        for (const btn of choicesEl.querySelectorAll(".choice")) {
+          btn.disabled = true;
+        }
+      }
+
+      function markBookChoices(selectedBook) {
+        for (const btn of choicesEl.querySelectorAll(".choice")) {
+          if (btn.textContent === state.current.book) {
+            btn.classList.add("reveal");
+          }
+          if (btn.textContent === selectedBook) {
+            if (selectedBook === state.current.book) btn.classList.add("correct");
+            else btn.classList.add("wrong");
+          }
+        }
+      }
+
+      function markChapterChoices(selectedChapter) {
+        for (const btn of choicesEl.querySelectorAll(".choice")) {
+          const value = Number(btn.textContent);
+          if (value === state.current.chapter) {
+            btn.classList.add("reveal");
+          }
+          if (value === selectedChapter) {
+            if (selectedChapter === state.current.chapter) btn.classList.add("correct");
+            else btn.classList.add("wrong");
+          }
+        }
+      }
+
+      function advanceBasesForBookCorrect() {
+        state.bases = Math.min(3, state.bases + 1);
+      }
+
+      function advanceBasesForChapterCorrect() {
+        const before = state.bases;
+        const after = before + 2;
+        if (after > 3) {
+          state.runs += (after - 3);
+        }
+        state.bases = Math.min(3, after);
+      }
+
+      function handleBookGuess(selectedBook) {
+        disableChoices();
+        markBookChoices(selectedBook);
+
+        if (selectedBook === state.current.book) {
+          state.score += 5;
+          state.bookCorrect += 1;
+          advanceBasesForBookCorrect();
+          feedbackEl.className = "feedback good";
+          feedbackEl.innerHTML = "<strong>Correct.</strong> This verse is from <strong>" +
+            escapeHtml(state.current.book) + "</strong>. Now guess the chapter.";
+        } else {
+          feedbackEl.className = "feedback bad";
+          feedbackEl.innerHTML = "Not quite. The correct book is <strong>" +
+            escapeHtml(state.current.book) + "</strong>. Now guess the chapter.";
+        }
+
+        state.phase = "chapter";
+        renderMeta();
+
+        setTimeout(function () {
+          choicesEl.innerHTML = "";
+          renderRound();
+        }, 800);
+      }
+
+      function handleChapterGuess(selectedChapter) {
+        disableChoices();
+        markChapterChoices(selectedChapter);
+
+        if (selectedChapter === state.current.chapter) {
+          state.score += 10;
+          state.chapterCorrect += 1;
+          advanceBasesForChapterCorrect();
+          feedbackEl.className = "feedback good";
+          feedbackEl.innerHTML = "<strong>Correct.</strong> The chapter is <strong>" +
+            state.current.chapter + "</strong>.";
+        } else {
+          feedbackEl.className = "feedback bad";
+          feedbackEl.innerHTML = "Not quite. The correct chapter is <strong>" +
+            state.current.chapter + "</strong>.";
+        }
+
+        referenceReveal.textContent = "Reference: " + state.current.reference;
+        state.phase = "done";
+        state.round += 1;
+        renderMeta();
+        nextBtn.style.display = "";
+      }
+
+      nextBtn.addEventListener("click", function () {
+        nextVerse();
+      });
+
+      async function init() {
+        if (!WORK_FULL[work]) {
+          showError("Invalid standard work in URL.");
+          return;
+        }
+
+        if (!LANGUAGE_FULL[lang]) {
+          showError("Invalid language in URL.");
+          return;
+        }
+
+        try {
+          state.verses = await loadData();
+          buildIndexes();
+          errorMount.style.display = "none";
+          gameGrid.style.display = "";
+          renderMeta();
+          nextVerse();
+        } catch (err) {
+          showError(err && err.message ? err.message : "Unknown error loading scripture data.");
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

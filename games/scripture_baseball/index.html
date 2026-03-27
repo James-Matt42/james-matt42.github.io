@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Scripture Baseball</title>
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#13213a;
+      --card:#ffffff;
+      --ink:#162033;
+      --muted:#64748b;
+      --line:#dbe4f0;
+      --blue:#2563eb;
+      --blue2:#1d4ed8;
+      --green:#16a34a;
+      --gold:#f59e0b;
+      --red:#dc2626;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:#fff;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.10), transparent 28%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      min-height:100vh;
+    }
+
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:28px 18px 48px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:22px;
+      padding:22px;
+      backdrop-filter: blur(5px);
+      box-shadow:0 12px 30px rgba(0,0,0,.18);
+    }
+
+    h1,h2,h3{margin:0}
+    h1{font-size:40px; line-height:1.05; letter-spacing:-.03em}
+    h2{font-size:22px; margin-bottom:14px}
+    p{margin:0; line-height:1.55}
+    .sub{margin-top:10px; color:#d7e3ff}
+
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:16px;
+    }
+
+    .badge{
+      padding:7px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      font-size:13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    label{
+      display:block;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#d8e4ff;
+      margin-bottom:7px;
+    }
+
+    select{
+      width:100%;
+      padding:12px 13px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background:#fff;
+      color:var(--ink);
+      font:inherit;
+      outline:none;
+    }
+
+    .collections{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .collection-btn{
+      width:100%;
+      text-align:left;
+      border:none;
+      border-radius:16px;
+      padding:16px 15px;
+      background:#fff;
+      color:var(--ink);
+      cursor:pointer;
+      transition:.15s ease;
+      border:2px solid transparent;
+      min-height:78px;
+    }
+
+    .collection-btn:hover:not(:disabled){
+      transform:translateY(-1px);
+      box-shadow:0 8px 18px rgba(0,0,0,.10);
+    }
+
+    .collection-btn.active{
+      border-color:var(--blue);
+      background:#eff6ff;
+    }
+
+    .collection-btn:disabled{
+      opacity:.5;
+      cursor:not-allowed;
+      background:#f8fafc;
+    }
+
+    .collection-name{
+      display:block;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+
+    .collection-note{
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .start-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      margin-top:18px;
+    }
+
+    .start-btn{
+      border:none;
+      background:linear-gradient(180deg, var(--gold), #d97706);
+      color:#fff;
+      font:inherit;
+      font-weight:700;
+      padding:13px 18px;
+      border-radius:14px;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(245,158,11,.28);
+    }
+
+    .start-btn:hover{transform:translateY(-1px)}
+    .msg{
+      color:#fff3cd;
+      font-size:14px;
+      min-height:20px;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .item{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.13);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .item b{display:block; margin-bottom:6px}
+
+    .footer{
+      margin-top:18px;
+      color:#d4def4;
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    @media (max-width: 860px){
+      .hero, .grid, .collections{grid-template-columns:1fr}
+      h1{font-size:32px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="panel">
+        <h1>Scripture Baseball</h1>
+        <p class="sub">
+          Pick a standard work, a language, and a difficulty. Then guess the book and chapter from a verse.
+        </p>
+        <div class="badges">
+          <span class="badge">Book guess = 5 points</span>
+          <span class="badge">Chapter guess = 10 points</span>
+          <span class="badge">Randomized answer choices</span>
+          <span class="badge">Powered by your GitHub data files</span>
+        </div>
+
+        <div class="grid">
+          <div>
+            <label for="language">Language</label>
+            <select id="language">
+              <option value="eng">English</option>
+              <option value="spa">Spanish</option>
+              <option value="deu">German</option>
+              <option value="por">Portuguese</option>
+              <option value="fra">French</option>
+              <option value="ita">Italian</option>
+              <option value="zhs">Chinese (Simplified)</option>
+              <option value="vie">Vietnamese</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="difficulty">Difficulty</label>
+            <select id="difficulty">
+              <option value="easy">Easy (2 choices)</option>
+              <option value="medium" selected>Medium (4 choices)</option>
+              <option value="hard">Hard (8 choices)</option>
+              <option value="extra-hard">Extra Hard (16 choices)</option>
+              <option value="exceedingly-hard">Exceedingly Hard (all)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:18px">
+          <label>Standard Work</label>
+          <div class="collections" id="collections"></div>
+        </div>
+
+        <div class="start-row">
+          <button class="start-btn" id="startBtn">Start Game</button>
+          <div class="msg" id="statusMsg"></div>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <h2>How it works</h2>
+        <div class="list">
+          <div class="item">
+            <b>1. Pick your set</b>
+            Choose a language, difficulty, and one standard work.
+          </div>
+          <div class="item">
+            <b>2. Read the verse</b>
+            The reference is hidden. You guess the book first.
+          </div>
+          <div class="item">
+            <b>3. Guess the chapter</b>
+            After the book guess, the correct book is shown. Then you guess the chapter.
+          </div>
+          <div class="item">
+            <b>4. Score points</b>
+            5 points for the correct book and 10 points for the correct chapter.
+          </div>
+        </div>
+        <div class="footer">
+          Vietnamese supports Book of Mormon, Doctrine and Covenants, and Pearl of Great Price only.
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const COLLECTIONS = [
+        { code: "BOM", full: "Book of Mormon" },
+        { code: "DC", full: "Doctrine and Covenants" },
+        { code: "NT", full: "New Testament" },
+        { code: "OT", full: "Old Testament" },
+        { code: "PGP", full: "Pearl of Great Price" }
+      ];
+
+      const languageEl = document.getElementById("language");
+      const difficultyEl = document.getElementById("difficulty");
+      const collectionsEl = document.getElementById("collections");
+      const startBtn = document.getElementById("startBtn");
+      const statusMsg = document.getElementById("statusMsg");
+
+      let selectedCollection = "BOM";
+
+      function availableCollectionsForLanguage(lang) {
+        if (lang === "vie") return new Set(["BOM", "DC", "PGP"]);
+        return new Set(["BOM", "DC", "NT", "OT", "PGP"]);
+      }
+
+      function renderCollections() {
+        const lang = languageEl.value;
+        const available = availableCollectionsForLanguage(lang);
+
+        if (!available.has(selectedCollection)) {
+          selectedCollection = Array.from(available)[0];
+        }
+
+        collectionsEl.innerHTML = "";
+
+        for (const collection of COLLECTIONS) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "collection-btn" + (collection.code === selectedCollection ? " active" : "");
+          btn.disabled = !available.has(collection.code);
+          btn.innerHTML =
+            '<span class="collection-name">' + collection.full + '</span>' +
+            '<span class="collection-note">' + collection.code + '</span>';
+          btn.addEventListener("click", function () {
+            selectedCollection = collection.code;
+            renderCollections();
+          });
+          collectionsEl.appendChild(btn);
+        }
+      }
+
+      languageEl.addEventListener("change", function () {
+        renderCollections();
+        statusMsg.textContent = "";
+      });
+
+      startBtn.addEventListener("click", function () {
+        if (!selectedCollection) {
+          statusMsg.textContent = "Choose a standard work first.";
+          return;
+        }
+
+        const params = new URLSearchParams({
+          work: selectedCollection,
+          lang: languageEl.value,
+          difficulty: difficultyEl.value
+        });
+
+        window.location.href = "./game.html?" + params.toString();
+      });
+
+      renderCollections();
+    })();
+  </script>
+</body>
+</html>
