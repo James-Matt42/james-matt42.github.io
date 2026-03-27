@@ -6,34 +6,39 @@
   <title>Scripture Baseball</title>
   <style>
     :root{
-      --bg1:#0b1220;
-      --bg2:#13213a;
+      --bg-1:#08111f;
+      --bg-2:#0f1d35;
+      --bg-3:#15294a;
       --card:#ffffff;
-      --ink:#162033;
+      --text:#162033;
       --muted:#64748b;
-      --line:#dbe4f0;
+      --line:#d9e3f0;
       --blue:#2563eb;
-      --blue2:#1d4ed8;
-      --green:#16a34a;
+      --blue-2:#1d4ed8;
       --gold:#f59e0b;
-      --red:#dc2626;
+      --soft-blue:#eef4ff;
+      --soft-gold:#fff7e8;
+      --shadow:0 18px 42px rgba(0,0,0,.16);
+      --radius:22px;
     }
 
     *{box-sizing:border-box}
+
     body{
       margin:0;
       font-family:Arial, Helvetica, sans-serif;
       color:#fff;
       background:
-        radial-gradient(circle at top left, rgba(255,255,255,.10), transparent 28%),
-        linear-gradient(180deg, var(--bg2), var(--bg1));
+        radial-gradient(circle at 12% 0%, rgba(255,255,255,.10), transparent 24%),
+        radial-gradient(circle at 90% 10%, rgba(37,99,235,.18), transparent 20%),
+        linear-gradient(180deg, var(--bg-3), var(--bg-2) 42%, var(--bg-1));
       min-height:100vh;
     }
 
     .wrap{
-      max-width:980px;
+      max-width:1160px;
       margin:0 auto;
-      padding:28px 18px 48px;
+      padding:28px 18px 44px;
     }
 
     .hero{
@@ -46,31 +51,76 @@
     .panel{
       background:rgba(255,255,255,.10);
       border:1px solid rgba(255,255,255,.16);
-      border-radius:22px;
-      padding:22px;
-      backdrop-filter: blur(5px);
-      box-shadow:0 12px 30px rgba(0,0,0,.18);
+      border-radius:26px;
+      padding:24px;
+      backdrop-filter: blur(6px);
+      box-shadow:0 16px 36px rgba(0,0,0,.16);
     }
 
-    h1,h2,h3{margin:0}
-    h1{font-size:40px; line-height:1.05; letter-spacing:-.03em}
-    h2{font-size:22px; margin-bottom:14px}
-    p{margin:0; line-height:1.55}
-    .sub{margin-top:10px; color:#d7e3ff}
-
-    .badges{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:16px;
-    }
-
-    .badge{
-      padding:7px 11px;
+    .eyebrow{
+      display:inline-block;
+      margin-bottom:12px;
+      padding:8px 12px;
       border-radius:999px;
       background:rgba(255,255,255,.10);
       border:1px solid rgba(255,255,255,.14);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#dbe8ff;
+    }
+
+    h1,h2,h3,p{margin:0}
+    h1{
+      font-size:46px;
+      line-height:1;
+      letter-spacing:-.04em;
+    }
+
+    .hero-copy{
+      margin-top:12px;
+      font-size:17px;
+      line-height:1.65;
+      color:#d7e5ff;
+      max-width:720px;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .chip{
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.15);
       font-size:13px;
+      color:#f5f9ff;
+    }
+
+    .card{
+      background:#fff;
+      border-radius:24px;
+      padding:22px;
+      color:var(--text);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(0,0,0,.05);
+      min-width:0;
+    }
+
+    h2{
+      font-size:24px;
+      letter-spacing:-.02em;
+    }
+
+    .sub{
+      margin-top:8px;
+      color:var(--muted);
+      line-height:1.55;
     }
 
     .grid{
@@ -82,127 +132,183 @@
 
     label{
       display:block;
+      margin-bottom:8px;
       font-size:12px;
-      font-weight:700;
-      letter-spacing:.08em;
       text-transform:uppercase;
-      color:#d8e4ff;
-      margin-bottom:7px;
+      letter-spacing:.08em;
+      font-weight:700;
+      color:#4c6488;
     }
 
     select{
       width:100%;
-      padding:12px 13px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.16);
+      padding:13px 14px;
+      border-radius:16px;
+      border:1px solid var(--line);
       background:#fff;
-      color:var(--ink);
       font:inherit;
+      color:var(--text);
       outline:none;
+      transition:.15s ease;
+    }
+
+    select:focus{
+      border-color:#93c5fd;
+      box-shadow:0 0 0 4px rgba(37,99,235,.10);
+    }
+
+    .section-title{
+      margin-top:18px;
+      margin-bottom:10px;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+      color:#4c6488;
     }
 
     .collections{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:10px;
-      margin-top:10px;
+      gap:12px;
     }
 
     .collection-btn{
-      width:100%;
-      text-align:left;
-      border:none;
-      border-radius:16px;
-      padding:16px 15px;
+      appearance:none;
+      border:2px solid var(--line);
       background:#fff;
-      color:var(--ink);
+      color:var(--text);
+      border-radius:18px;
+      padding:16px 16px;
+      text-align:left;
       cursor:pointer;
-      transition:.15s ease;
-      border:2px solid transparent;
-      min-height:78px;
+      transition:.16s ease;
+      min-height:86px;
+      width:100%;
     }
 
     .collection-btn:hover:not(:disabled){
       transform:translateY(-1px);
-      box-shadow:0 8px 18px rgba(0,0,0,.10);
+      border-color:#9fc2ff;
+      box-shadow:0 10px 22px rgba(37,99,235,.10);
     }
 
     .collection-btn.active{
       border-color:var(--blue);
-      background:#eff6ff;
+      background:linear-gradient(180deg, #f7fbff, #edf5ff);
+      box-shadow:0 0 0 5px rgba(37,99,235,.08);
     }
 
     .collection-btn:disabled{
-      opacity:.5;
+      opacity:.45;
       cursor:not-allowed;
       background:#f8fafc;
     }
 
     .collection-name{
       display:block;
-      font-weight:700;
-      margin-bottom:4px;
+      font-size:16px;
+      font-weight:800;
+      letter-spacing:-.01em;
+      margin-bottom:5px;
     }
 
-    .collection-note{
+    .collection-caption{
       display:block;
-      color:var(--muted);
       font-size:13px;
-      line-height:1.35;
+      line-height:1.4;
+      color:var(--muted);
     }
 
-    .start-row{
+    .start-area{
       display:flex;
       flex-wrap:wrap;
-      gap:10px;
+      gap:12px;
       align-items:center;
       margin-top:18px;
     }
 
     .start-btn{
       border:none;
+      border-radius:16px;
+      padding:14px 20px;
       background:linear-gradient(180deg, var(--gold), #d97706);
       color:#fff;
       font:inherit;
-      font-weight:700;
-      padding:13px 18px;
-      border-radius:14px;
+      font-weight:800;
       cursor:pointer;
-      box-shadow:0 10px 24px rgba(245,158,11,.28);
+      box-shadow:0 14px 26px rgba(245,158,11,.24);
+      transition:.15s ease;
     }
 
-    .start-btn:hover{transform:translateY(-1px)}
-    .msg{
-      color:#fff3cd;
+    .start-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .status{
+      color:#92400e;
       font-size:14px;
+      font-weight:700;
       min-height:20px;
     }
 
-    .list{
+    .feature-list{
       display:grid;
       gap:12px;
-      margin-top:12px;
-    }
-
-    .item{
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.13);
-      border-radius:16px;
-      padding:14px;
-    }
-
-    .item b{display:block; margin-bottom:6px}
-
-    .footer{
       margin-top:18px;
-      color:#d4def4;
+    }
+
+    .feature{
+      padding:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, var(--soft-blue), #fff);
+      border:1px solid #dce8ff;
+    }
+
+    .feature b{
+      display:block;
+      margin-bottom:6px;
+      font-size:15px;
+      color:#173265;
+    }
+
+    .feature span{
+      color:#41566f;
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    .footer-note{
+      margin-top:18px;
       font-size:13px;
+      color:#d9e4f8;
       line-height:1.5;
     }
 
-    @media (max-width: 860px){
-      .hero, .grid, .collections{grid-template-columns:1fr}
-      h1{font-size:32px}
+    @media (max-width: 900px){
+      .hero{
+        grid-template-columns:1fr;
+      }
+
+      h1{
+        font-size:36px;
+      }
+    }
+
+    @media (max-width: 640px){
+      .grid,
+      .collections{
+        grid-template-columns:1fr;
+      }
+
+      .wrap{
+        padding:18px 12px 30px;
+      }
+
+      .panel,
+      .card{
+        padding:18px;
+      }
     }
   </style>
 </head>
@@ -210,22 +316,31 @@
   <div class="wrap">
     <div class="hero">
       <section class="panel">
+        <div class="eyebrow">Scripture Quiz Game</div>
         <h1>Scripture Baseball</h1>
-        <p class="sub">
-          Pick a standard work, a language, and a difficulty. Then guess the book and chapter from a verse.
+        <p class="hero-copy">
+          Read a verse, identify the book it comes from, then guess the chapter. Choose your language, set the difficulty, and play as long as you like.
         </p>
-        <div class="badges">
-          <span class="badge">Book guess = 5 points</span>
-          <span class="badge">Chapter guess = 10 points</span>
-          <span class="badge">Randomized answer choices</span>
-          <span class="badge">Powered by your GitHub data files</span>
+
+        <div class="chips">
+          <div class="chip">Book guess: 5 points</div>
+          <div class="chip">Chapter guess: 10 points</div>
+          <div class="chip">Multiple languages</div>
+          <div class="chip">Difficulty-based answer sets</div>
         </div>
+      </section>
+
+      <section class="card">
+        <h2>Start a game</h2>
+        <p class="sub">
+          Choose a language, a difficulty, and the standard work collection you want to play from.
+        </p>
 
         <div class="grid">
           <div>
             <label for="language">Language</label>
             <select id="language">
-              <option value="eng">English</option>
+              <option value="eng" selected>English</option>
               <option value="spa">Spanish</option>
               <option value="deu">German</option>
               <option value="por">Portuguese</option>
@@ -239,61 +354,80 @@
           <div>
             <label for="difficulty">Difficulty</label>
             <select id="difficulty">
-              <option value="easy">Easy (2 choices)</option>
-              <option value="medium" selected>Medium (4 choices)</option>
-              <option value="hard">Hard (8 choices)</option>
-              <option value="extra-hard">Extra Hard (16 choices)</option>
-              <option value="exceedingly-hard">Exceedingly Hard (all)</option>
+              <option value="easy">Easy — 2 choices</option>
+              <option value="medium" selected>Medium — 4 choices</option>
+              <option value="hard">Hard — 8 choices</option>
+              <option value="extra-hard">Extra Hard — 16 choices</option>
+              <option value="exceedingly-hard">Exceedingly Hard — All choices</option>
             </select>
           </div>
         </div>
 
-        <div style="margin-top:18px">
-          <label>Standard Work</label>
-          <div class="collections" id="collections"></div>
-        </div>
+        <div class="section-title">Standard Work Collection</div>
+        <div class="collections" id="collections"></div>
 
-        <div class="start-row">
-          <button class="start-btn" id="startBtn">Start Game</button>
-          <div class="msg" id="statusMsg"></div>
+        <div class="start-area">
+          <button class="start-btn" id="startBtn">Play</button>
+          <div class="status" id="statusMsg"></div>
         </div>
       </section>
+    </div>
 
-      <aside class="panel">
-        <h2>How it works</h2>
-        <div class="list">
-          <div class="item">
-            <b>1. Pick your set</b>
-            Choose a language, difficulty, and one standard work.
-          </div>
-          <div class="item">
-            <b>2. Read the verse</b>
-            The reference is hidden. You guess the book first.
-          </div>
-          <div class="item">
-            <b>3. Guess the chapter</b>
-            After the book guess, the correct book is shown. Then you guess the chapter.
-          </div>
-          <div class="item">
-            <b>4. Score points</b>
-            5 points for the correct book and 10 points for the correct chapter.
-          </div>
+    <div style="margin-top:18px" class="card">
+      <h2>How to play</h2>
+      <div class="feature-list">
+        <div class="feature">
+          <b>1. Read the verse</b>
+          <span>The verse text appears with the reference hidden.</span>
         </div>
-        <div class="footer">
-          Vietnamese supports Book of Mormon, Doctrine and Covenants, and Pearl of Great Price only.
+        <div class="feature">
+          <b>2. Guess the book</b>
+          <span>Your answer choices are based on the selected difficulty.</span>
         </div>
-      </aside>
+        <div class="feature">
+          <b>3. Guess the chapter</b>
+          <span>After the book guess, the correct book is shown before you choose a chapter.</span>
+        </div>
+        <div class="feature">
+          <b>4. Keep building your score</b>
+          <span>Track your score, streak, and personal best as you move from verse to verse.</span>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        This game works best with short, focused rounds. You can keep playing indefinitely.
+      </div>
     </div>
   </div>
 
   <script>
     (function () {
       const COLLECTIONS = [
-        { code: "BOM", full: "Book of Mormon" },
-        { code: "DC", full: "Doctrine and Covenants" },
-        { code: "NT", full: "New Testament" },
-        { code: "OT", full: "Old Testament" },
-        { code: "PGP", full: "Pearl of Great Price" }
+        {
+          code: "BOM",
+          full: "Book of Mormon",
+          caption: "15 books from 1 Nephi through Moroni"
+        },
+        {
+          code: "DC",
+          full: "Doctrine and Covenants",
+          caption: "Sections and Official Declarations"
+        },
+        {
+          code: "NT",
+          full: "New Testament",
+          caption: "From Matthew through Revelation"
+        },
+        {
+          code: "OT",
+          full: "Old Testament",
+          caption: "From Genesis through Malachi"
+        },
+        {
+          code: "PGP",
+          full: "Pearl of Great Price",
+          caption: "Moses, Abraham, Joseph Smith, and more"
+        }
       ];
 
       const languageEl = document.getElementById("language");
@@ -326,9 +460,10 @@
           btn.disabled = !available.has(collection.code);
           btn.innerHTML =
             '<span class="collection-name">' + collection.full + '</span>' +
-            '<span class="collection-note">' + collection.code + '</span>';
+            '<span class="collection-caption">' + collection.caption + '</span>';
           btn.addEventListener("click", function () {
             selectedCollection = collection.code;
+            statusMsg.textContent = "";
             renderCollections();
           });
           collectionsEl.appendChild(btn);
@@ -342,7 +477,7 @@
 
       startBtn.addEventListener("click", function () {
         if (!selectedCollection) {
-          statusMsg.textContent = "Choose a standard work first.";
+          statusMsg.textContent = "Choose a collection to begin.";
           return;
         }
 
