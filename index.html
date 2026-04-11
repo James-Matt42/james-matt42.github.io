@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Matthew's Homepage</title>
+  <meta
+    name="description"
+    content="Matthew's Homepage"
+  />
+  <style>
+    :root {
+      --bg-top: #f7efe1;
+      --bg-bottom: #f4f7fb;
+      --ink: #1d2230;
+      --muted: #5f6677;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: #ffffff;
+      --line: rgba(29, 34, 48, 0.1);
+      --shadow: 0 26px 60px rgba(36, 37, 45, 0.12);
+      --accent: #bc4f2a;
+      --accent-deep: #8b3419;
+      --accent-soft: #fff1e9;
+      --blue: #1d5fd1;
+      --blue-soft: #edf4ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 32%),
+        radial-gradient(circle at 85% 12%, rgba(188, 79, 42, 0.12), transparent 20%),
+        linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)),
+        linear-gradient(135deg, rgba(188, 79, 42, 0.05), rgba(29, 95, 209, 0.05));
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -50px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(188, 79, 42, 0.18), transparent 68%);
+      z-index: -1;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 12ch;
+      font-size: clamp(2.6rem, 5vw, 4.7rem);
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy {
+      max-width: 58ch;
+      margin-top: 18px;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-size: 0.98rem;
+      font-weight: 700;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .hero-link.primary {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+      box-shadow: 0 16px 28px rgba(139, 52, 25, 0.24);
+    }
+
+    .hero-link.secondary {
+      background: var(--surface-strong);
+      border-color: var(--line);
+      color: var(--blue);
+    }
+
+    .hero-link:hover,
+    .hero-link:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .projects {
+      margin-top: 24px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: var(--surface);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      transform: translateY(10px);
+      opacity: 0;
+      animation: rise 0.7s ease forwards;
+    }
+
+    .projects-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .projects-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .projects-head h2 {
+      margin-top: 10px;
+      font-size: clamp(1.6rem, 3vw, 2.1rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .projects-copy {
+      max-width: 46ch;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.98rem;
+    }
+
+    .project-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .project-link {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.86);
+      text-decoration: none;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .project-link:hover,
+    .project-link:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(29, 95, 209, 0.24);
+      box-shadow: 0 12px 22px rgba(29, 34, 48, 0.08);
+    }
+
+    .project-main {
+      min-width: 0;
+    }
+
+    .project-meta {
+      display: inline-block;
+      margin-bottom: 6px;
+      color: var(--accent-deep);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .project-title {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .project-desc {
+      margin-top: 4px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.98rem;
+    }
+
+    .project-arrow {
+      color: var(--blue);
+      font-size: 1rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .footer {
+      margin-top: 24px;
+      padding: 20px 4px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 20px, 1100px);
+        padding: 20px 0 32px;
+      }
+
+      .hero {
+        padding: 24px;
+        border-radius: 24px;
+      }
+
+      .projects {
+        padding: 20px;
+      }
+
+      .project-link {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .project-arrow {
+        justify-self: start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>Matthew's Homepage</h1>
+      <p class="hero-copy">
+        Welcome to my public project page. Feel free to explore any of the projects below.
+      </p>
+    </section>
+
+    <section class="projects" aria-label="Projects">
+      <div class="projects-head">
+        <div>
+          <h2>Current Projects</h2>
+        </div>
+      </div>
+
+      <div class="project-list">
+        <a class="project-link" href="games/apricots/">
+          <div class="project-main">
+            <span class="project-title">Apricots</span>
+            <p class="project-desc">
+              Browser-playable Apricots using WASM with controls for starting, pausing, and quitting.
+            </p>
+          </div>
+          <span class="project-arrow">Open project -></span>
+        </a>
+
+        <a class="project-link" href="games/scripture_baseball/">
+          <div class="project-main">
+            <span class="project-title">Scripture Baseball</span>
+            <p class="project-desc">
+              Scripture-themed trivia game that draws from the Standard Works in several languages.
+            </p>
+          </div>
+          <span class="project-arrow">Open project -></span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
